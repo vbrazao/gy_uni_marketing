@@ -31,6 +31,37 @@ tab <- readRDS(
   here::here("02_analysis-codes", "outputs", "table_descriptives.rds")
 )
 
+tab_list <- readRDS(
+  here::here("02_analysis-codes", "outputs", "table_categories_descriptives.rds")
+)
+```
+
+# All posts, by university
+```{r}
 rempsyc::nice_table(tab, separate.header = TRUE, italics = seq(tab))
 ```
 
+# One table per category, by university
+
+```{r}
+#| output: asis
+
+for (i in length(tab_list)){
+  tab <- tab_list[[i]]
+  
+  cat <- names(tab_list)[[1]]
+  
+  title <- paste0("Descriptives for ", cat, " posts, by University")
+  
+  rempsyc::nice_table(tab, separate.header = TRUE, italics = seq(tab), 
+                      title = title)
+  
+    cat(sep = "\n", knitr::knit_child(quiet = TRUE, text = c(
+    "```{r}",
+    "#| echo: false",
+    "rempsyc::nice_table(tab, separate.header = TRUE, italics = seq(tab), 
+                      title = title)",
+    "```"
+  )))
+}
+```

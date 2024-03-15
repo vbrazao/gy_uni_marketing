@@ -1,6 +1,18 @@
 
+library(groundhog)
+
+groundhog_day <- "2024-03-01"
+
+groundhog::meta.groundhog(groundhog_day)
+
+groundhog::groundhog.library(
+  "
 library(readxl)
 library(here)
+  ", date = groundhog_day
+)
+
+
 
 # import the .xlsx data file
 dat_raw <- readxl::read_xlsx(

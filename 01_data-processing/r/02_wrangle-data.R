@@ -1,6 +1,17 @@
 
+library(groundhog)
+
+groundhog_day <- "2024-03-01"
+
+groundhog::meta.groundhog(groundhog_day)
+
+groundhog::groundhog.library(
+  "
 library(tidyverse)
 library(here)
+  ", date = groundhog_day
+)
+
 
 # import raw data, already selected relevant columns
 dat_raw <- readRDS(

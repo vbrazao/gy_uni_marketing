@@ -10,8 +10,6 @@ groundhog::groundhog.library(
 library(tidyverse)
 library(here)
 library(gtsummary)
-library(flextable)
-library(rempsyc)
   ", date = groundhog_day
 )
 
@@ -31,8 +29,7 @@ tab <- dat |>
       .names = "{.col}.{.fn}"
     ),
     .by = University
-  ) %>%
-  rempsyc::nice_table(., separate.header = TRUE, italics = seq(.))
+  )
 
 # save table
 saveRDS(

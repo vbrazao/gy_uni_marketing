@@ -1,0 +1,25 @@
+---
+title: "Descriptives"
+execute:
+  echo: false
+  message: false
+format:
+  apaquarto-docx: default
+---
+
+```{r}
+#| message: false
+
+library(here)
+library(gtsummary)
+
+library(benelib) # from devtools::install_github("benediktclaus/benelib")
+benelib::theme_gtsummary_apa(set_theme = TRUE)
+
+tab <- readRDS(
+  here::here("02_analysis-codes", "outputs", "table_descriptives.rds")
+)
+
+tab
+```
+

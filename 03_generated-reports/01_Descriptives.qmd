@@ -3,8 +3,7 @@ title: "Descriptives"
 execute:
   echo: false
   message: false
-format:
-  apaquarto-docx: default
+format: docx
 ---
 
 ```{r}
@@ -20,6 +19,8 @@ groundhog::groundhog.library(
   "
 library(here)
 library(gtsummary)
+library(flextable)
+library(rempsyc)
   ", date = groundhog_day
 )
 
@@ -30,6 +31,6 @@ tab <- readRDS(
   here::here("02_analysis-codes", "outputs", "table_descriptives.rds")
 )
 
-tab
+rempsyc::nice_table(tab, separate.header = TRUE, italics = seq(tab))
 ```
 

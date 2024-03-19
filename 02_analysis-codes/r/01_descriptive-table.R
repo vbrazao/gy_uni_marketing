@@ -62,6 +62,17 @@ tab_cat_list <- levels(dat$Category) |>
       ), 
   )
 
+# table with just the number of posts
+
+tab_n <- dat |> 
+  dplyr::count(
+    University, Category, name = "N.By category"
+  ) |> 
+  dplyr::mutate(
+    "N.All in University" = sum(`N.By category`),
+    .by = University
+  )
+
 # save tables
 saveRDS(
   object = tab_uni,
@@ -72,6 +83,12 @@ saveRDS(
   object = tab_cat,
   file = here::here("02_analysis-codes", "outputs", "table_cat.rds")
 )
+
+saveRDS(
+  object = tab_n,
+  file = here::here("02_analysis-codes", "outputs", "table_n.rds")
+)
+
 
 # save list of tables
 saveRDS(

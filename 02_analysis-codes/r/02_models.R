@@ -14,63 +14,44 @@ library(here)
 # load the data
 dat <- readRDS(file = here::here("01_data-processing", "data", "data_final.rds"))
 
+# interactions by university
 m1.1 <- glm(
   formula = interactions ~ university,
   data = dat,
   family = quasipoisson
 )
 
+# interactions by category
 m1.2 <- glm(
   formula = interactions ~ category,
   data = dat,
   family = quasipoisson
 )
 
+# interactions by category and university
 m1.3 <- glm(
-  formula = interactions ~ university*category,
+  formula = interactions ~ university + category,
   data = dat,
   family = quasipoisson
 )
 
-m2.1 <- glm(
+# positive interactions by category
+m2.2 <- glm(
   formula = pos_sentiment ~ category,
   data = dat,
   family = quasipoisson
 )
 
-m2.2 <- glm(
-  formula = pos_sentiment ~ university,
-  data = dat,
-  family = quasipoisson
-)
-
-m2.3 <- glm(
-  formula = pos_sentiment ~ university*category,
-  data = dat,
-  family = quasipoisson
-)
-
-m3.1 <- glm(
-  formula = neg_sentiment ~ category,
-  data = dat,
-  family = quasipoisson
-)
-
+# negative interactions by category
 m3.2 <- glm(
-  formula = neg_sentiment ~ university,
-  data = dat,
-  family = quasipoisson
-)
-
-m3.3 <- glm(
-  formula = neg_sentiment ~ university*category,
+  formula = neg_sentiment ~ category,
   data = dat,
   family = quasipoisson
 )
 
 # create list to hold all models 
 
-models <- list(m1.1,m1.2,m1.3,m2.1,m2.2,m2.3,m3.1,m3.2,m3.3)
+models <- list(m1.1, m1.2, m1.3, m2.2, m3.2)
 
 # save list of models 
 

@@ -4,6 +4,7 @@ execute:
   echo: false
   message: false
 format: docx
+toc: true
 ---
 
 ```{r}
@@ -19,6 +20,7 @@ groundhog::groundhog.library(
   "
 library(here)
 library(tidyverse)
+library(scales)
 library(gtsummary)
 library(flextable)
 library(rempsyc)
@@ -70,15 +72,12 @@ rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
 ```{r}
 #| output: asis
 
-for (i in length(tab_list)){
+for (i in 1:length(tab_list)){
   tab <- tab_list[[i]]
   
-  cat <- names(tab_list)[[1]]
+  cat <- names(tab_list)[[i]]
   
   title <- paste0("Descriptives for ", cat, " posts, by University")
-  
-  rempsyc::nice_table(tab, separate.header = TRUE, italics = seq(tab), 
-                      title = title)
   
     cat(sep = "\n", knitr::knit_child(quiet = TRUE, text = c(
     "```{r}",
@@ -97,20 +96,24 @@ for (i in length(tab_list)){
 ```{r}
 #| output: asis
 
-for (i in length(plot_list)){
+for (i in 1:length(plot_list)){
   plot <- plot_list[[i]]
   
-  university <- names(tab_list)[[1]]
+  university <- names(plot_list)[[i]]
   
-  title <- paste0("Total interactions for ", university, " posts, by category")
+  title <- paste0("Total interactions for\n", university, "\nposts, by category")
   
-  plot_titled <- plot + ggplot2::labs(title = title)
+  plot_titled <- plot + 
+    scale_x_discrete(labels = scales::label_wrap(15)) +
+    ggplot2::labs(title = stringr::str_wrap(title, width = 35), x = "")
   
-    cat(sep = "\n", knitr::knit_child(quiet = TRUE, text = c(
+    res <- knitr::knit_child(quiet = TRUE, text = c(
     "```{r}",
     "#| echo: false",
-    "plot_titled",
+    "print(plot_titled)",
     "```"
-  )))
+  ), envir = environment())
+    
+    cat(res, sep = '\n')
 }
 ```

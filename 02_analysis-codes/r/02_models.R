@@ -51,7 +51,13 @@ m3.2 <- glm(
 
 # create list to hold all models 
 
-models <- list(m1.1, m1.2, m1.3, m2.2, m3.2)
+models <- list(
+  total_uni = m1.1, 
+  total_cat = m1.2, 
+  total_uni_cat = m1.3, 
+  pos_cat = m2.2, 
+  neg_cat = m3.2
+)
 
 # save list of models 
 

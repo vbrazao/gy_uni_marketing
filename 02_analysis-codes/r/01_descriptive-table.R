@@ -28,6 +28,7 @@ tab_uni <- dat |>
       .fns = list("Mean" = mean, "SD" = sd),
       .names = "{.col}.{.fn}"
     ),
+    N = dplyr::n(),
     .by = University
   )
 
@@ -38,6 +39,7 @@ tab_cat <- dat |>
       .fns = list("Mean" = mean, "SD" = sd),
       .names = "{.col}.{.fn}"
     ),
+    N = dplyr::n(),
     .by = Category
   )
 
@@ -55,6 +57,7 @@ tab_cat_list <- levels(dat$Category) |>
           .fns = list("Mean" = mean, "SD" = sd),
           .names = "{.col}.{.fn}"
         ),
+        N = dplyr::n(),
         .by = University
       ), 
   )

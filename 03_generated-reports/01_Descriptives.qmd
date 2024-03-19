@@ -25,7 +25,9 @@ library(rempsyc)
 )
 
 
-
+tab_n <- readRDS(
+  here::here("02_analysis-codes", "outputs", "table_n.rds")
+)
 
 tab_uni <- readRDS(
   here::here("02_analysis-codes", "outputs", "table_uni.rds")
@@ -35,10 +37,17 @@ tab_cat <- readRDS(
   here::here("02_analysis-codes", "outputs", "table_cat.rds")
 )
 
+
 tab_list <- readRDS(
   here::here("02_analysis-codes", "outputs", "tables_uni_cat.rds")
 )
 ```
+
+# Number of posts by university and category
+```{r}
+rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))
+```
+
 
 # All posts, by university
 ```{r}

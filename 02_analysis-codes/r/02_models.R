@@ -42,9 +42,24 @@ m2.2 <- glm(
   family = quasipoisson
 )
 
+# positive interactions by category and university
+m2.3 <- glm(
+  formula = pos_sentiment ~ university + category,
+  data = dat,
+  family = quasipoisson
+)
+
+
 # negative interactions by category
 m3.2 <- glm(
   formula = neg_sentiment ~ category,
+  data = dat,
+  family = quasipoisson
+)
+
+# negative interactions by category and university
+m3.3 <- glm(
+  formula = neg_sentiment ~ university + category,
   data = dat,
   family = quasipoisson
 )
@@ -56,7 +71,9 @@ models <- list(
   total_cat = m1.2, 
   total_uni_cat = m1.3, 
   pos_cat = m2.2, 
-  neg_cat = m3.2
+  pos_uni_cat = m2.3, 
+  neg_cat = m3.2,
+  neg_uni_cat = m3.3
 )
 
 # save list of models 

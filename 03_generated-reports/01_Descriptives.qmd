@@ -18,6 +18,7 @@ groundhog::meta.groundhog(groundhog_day)
 groundhog::groundhog.library(
   "
 library(here)
+library(tidyverse)
 library(gtsummary)
 library(flextable)
 library(rempsyc)
@@ -41,25 +42,30 @@ tab_cat <- readRDS(
 tab_list <- readRDS(
   here::here("02_analysis-codes", "outputs", "tables_uni_cat.rds")
 )
+
+plot_list <- readRDS(
+  here::here("02_analysis-codes", "outputs", "plots_total.rds")
+)
 ```
 
-# Number of posts by university and category
+# Tables
+## Number of posts by university and category
 ```{r}
 rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))
 ```
 
 
-# All posts, by university
+## All posts, by university
 ```{r}
 rempsyc::nice_table(tab_uni, separate.header = TRUE, italics = seq(tab_uni))
 ```
 
-# All posts, by category
+## All posts, by category
 ```{r}
 rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
 ```
 
-# One table per category, by university
+## One table per category, by university
 
 ```{r}
 #| output: asis
@@ -79,6 +85,31 @@ for (i in length(tab_list)){
     "#| echo: false",
     "rempsyc::nice_table(tab, separate.header = TRUE, italics = seq(tab), 
                       title = title)",
+    "```"
+  )))
+}
+```
+
+# Plots
+
+## One plot per University, by category
+
+```{r}
+#| output: asis
+
+for (i in length(plot_list)){
+  plot <- plot_list[[i]]
+  
+  university <- names(tab_list)[[1]]
+  
+  title <- paste0("Total interactions for ", university, " posts, by category")
+  
+  plot_titled <- plot + ggplot2::labs(title = title)
+  
+    cat(sep = "\n", knitr::knit_child(quiet = TRUE, text = c(
+    "```{r}",
+    "#| echo: false",
+    "plot_titled",
     "```"
   )))
 }

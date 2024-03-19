@@ -86,12 +86,6 @@ plot_total_list <- unique(dat$University) |>
       coord_flip()
   )
 
-plot_total_list <- dat |> 
-  dplyr::filter(University == "Tel Aviv University") |> 
-  ggplot(aes(x = Category, y = Interactions)) +
-  geom_jitter(width = 0.25, height = 0.25) + 
-  coord_flip()
-
 # save tables
 saveRDS(
   object = tab_uni,

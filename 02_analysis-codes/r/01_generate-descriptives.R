@@ -73,6 +73,25 @@ tab_n <- dat |>
     .by = University
   )
 
+# create a plot for each university 
+plot_total_list <- unique(dat$University) |> 
+  purrr::set_names() |> 
+  purrr::map(
+    .f = ~ dat |> 
+      dplyr::filter(
+        University == .x
+      ) |> 
+      ggplot(aes(x = Category, y = Interactions)) +
+      geom_jitter(width = 0.25, height = 0.25) + 
+      coord_flip()
+  )
+
+plot_total_list <- dat |> 
+  dplyr::filter(University == "Tel Aviv University") |> 
+  ggplot(aes(x = Category, y = Interactions)) +
+  geom_jitter(width = 0.25, height = 0.25) + 
+  coord_flip()
+
 # save tables
 saveRDS(
   object = tab_uni,
@@ -89,11 +108,16 @@ saveRDS(
   file = here::here("02_analysis-codes", "outputs", "table_n.rds")
 )
 
-
 # save list of tables
 saveRDS(
   object = tab_cat_list,
   file = here::here("02_analysis-codes", "outputs", "tables_uni_cat.rds")
+)
+
+# save list of plots
+saveRDS(
+  object = plot_total_list,
+  file = here::here("02_analysis-codes", "outputs", "plots_total.rds")
 )
 
 # clean environment

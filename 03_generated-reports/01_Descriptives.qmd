@@ -3,8 +3,10 @@ title: "Descriptives"
 execute:
   echo: false
   message: false
-format: docx
-toc: true
+format:
+  docx:
+    toc: true
+    number-sections: true
 ---
 
 ```{r}

@@ -3,7 +3,10 @@ title: "Inferential report"
 execute:
   echo: false
   message: false
-format: docx
+format: 
+  docx:
+    toc: true
+    number-sections: true
 ---
 
 ```{r}
@@ -18,11 +21,10 @@ groundhog::meta.groundhog(groundhog_day)
 groundhog::groundhog.library(
   "
 library(here)
-library(modelsummary)
 library(marginaleffects)
 library(lmtest)
 library(sandwich)
-library(rempsyc)
+library(gtsummary)
   ", date = groundhog_day
 )
 
@@ -41,13 +43,17 @@ models <- readRDS(
 
 To compare the amount of post interactions across the different universities, we ran a quasi-poisson regression[^1] using university as the sole predictor. The following table presents the regression results and indicates that several universities show significantly more interactions as compared to Ariel University.
 
+
 [^1]: One of the standard ways to analyze count outcomes (such as the number of interactions with a post).
 
 ```{r}
-lmtest::coeftest(x = models$total_uni, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$total_uni, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 ```
 
+
 To view the differences more clearly, we make and summarize predictions for post interactions according to university, and can clearly see that the University of Haifa gets the most engagement with their posts, while Bar-Ilan University gets the least.
+
 
 ```{r}
 marginaleffects::avg_predictions(
@@ -57,7 +63,9 @@ marginaleffects::avg_predictions(
 )
 ```
 
+
 The graph makes these stark differences even more clear:
+
 
 ```{r}
 marginaleffects::plot_predictions(
@@ -72,11 +80,15 @@ marginaleffects::plot_predictions(
 
 To compare the amount of post interactions across the different post categories, we ran a quasi-poisson regression using category as the sole predictor. The following table presents the regression results and shows that the category "Supporting our Troops and Hostages" receives more interactions that the rest.
 
+
 ```{r}
-lmtest::coeftest(x = models$total_cat, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$total_cat, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 ```
 
+
 To view the differences more clearly, we make and summarize predictions for post interactions according to post category.
+
 
 ```{r}
 marginaleffects::avg_predictions(
@@ -86,7 +98,9 @@ marginaleffects::avg_predictions(
 )
 ```
 
+
 This information in graph form:
+
 
 ```{r}
 marginaleffects::plot_predictions(
@@ -99,13 +113,18 @@ marginaleffects::plot_predictions(
 
 ### Controlling for University
 
+
 As we have established that there are differences in total interactions when comparing different universities, it is possible that the differences we observe across post categories are due to an imbalance in how many posts of each category are posted by each university. Using a quasi-poisson model that predicts total interactions and includes both category and university as predictors is one way to account for this potential imbalance. Model results are presented in the following table:
 
+
 ```{r}
-lmtest::coeftest(x = models$total_uni_cat, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$total_uni_cat, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 ```
 
+
 Most usefully, we can use the model to make predictions for all combinations of category and university, and summarise the predictions by category, averaging across all universities. Doing this, we see that the effect is slightly less pronounced, but the conclusion remains the same: posts in the category "Supporting Our Troops and Hostages" clearly receive more interactions.
+
 
 ```{r}
 marginaleffects::avg_predictions(
@@ -119,7 +138,9 @@ marginaleffects::avg_predictions(
 )
 ```
 
+
 As a graph:
+
 
 ```{r}
 marginaleffects::plot_predictions(
@@ -138,13 +159,18 @@ marginaleffects::plot_predictions(
 
 ## By category
 
+
 To compare the amount of positive interactions across the different post categories, we ran a quasi-poisson regression using category as the sole predictor. The following table presents the regression results and shows that the category "Supporting our Troops and Hostages" receives more positive interactions that the rest, but not significantly more than the baseline category "Community Support".
 
+
 ```{r}
-lmtest::coeftest(x = models$pos_cat, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$pos_cat, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 ```
 
+
 To view the differences more clearly, we make and summarize predictions for post interactions according to post category.
+
 
 ```{r}
 marginaleffects::avg_predictions(
@@ -163,11 +189,13 @@ marginaleffects::plot_predictions(
 
 ### Controlling for university
 
+
 As above, we also run a model with university as an additional predictor and summarise predictions averaging over the different universities:
 
 
 ```{r}
-lmtest::coeftest(x = models$pos_uni_cat, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$pos_uni_cat, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 
 marginaleffects::avg_predictions(
   model = models$pos_uni_cat,
@@ -196,13 +224,18 @@ marginaleffects::plot_predictions(
 
 ## By category
 
+
 To compare the amount of negative interactions across the different post categories, we ran a quasi-poisson regression using category as the sole predictor. The following table presents the regression results and shows that the category "Supporting our Troops and Hostages" receives more negative interactions that the rest.
 
+
 ```{r}
-lmtest::coeftest(x = models$neg_cat, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$neg_cat, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 ```
 
+
 To view the differences more clearly, we make and summarize predictions for negative interactions according to post category.
+
 
 ```{r}
 marginaleffects::avg_predictions(
@@ -225,7 +258,8 @@ As above, we also run a model with university as an additional predictor and sum
 
 
 ```{r}
-lmtest::coeftest(x = models$neg_uni_cat, vcov = sandwich::vcovHC)
+#| message: false
+gtsummary::tbl_regression(models$neg_uni_cat, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
 
 marginaleffects::avg_predictions(
   model = models$neg_uni_cat,

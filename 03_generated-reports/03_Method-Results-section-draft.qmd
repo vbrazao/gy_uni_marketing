@@ -7,9 +7,8 @@ format:
   docx:
     toc: true
     number-sections: true
-  pdf:
-    toc: true
 bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r}
@@ -74,7 +73,7 @@ Negative sentiment was calculated for each post by adding the number of negative
 
 ## Descriptives
 
-We collected `r n_posts` posts from the 9 Universities included in the sample. Table 1 shows the total number of posts in each category created within each University's Facebook page, as well as the total number of posts for each University.
+We collected `r n_posts` posts from the 9 Universities included in the sample. @tbl-n_posts shows the total number of posts in each category created within each University's Facebook page, as well as the total number of posts for each University. We can see that all universities had over 70 posts in this period, with Bar-Ilan University topping the chart with 128 post.
 
 ```{r}
 #| label: tbl-n_posts
@@ -85,4 +84,24 @@ tab_n <- readRDS(here::here("02_analysis-codes", "outputs", "table_n.rds"))
 rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))
 ```
 
-Table 1 indicating the following descriptive variables: University, number of followers, total interactions, positive and negative sentiment averages per page.
+Examining the descriptive statistics by University, as presented in @tbl-uni, we see clear signs of overdispersion (the standard deviation of each count is clearly higher than the mean). The same can be observed when we calculate descriptive statistics for each category instea, as in @tbl-cat. More descriptive analyses, including simple visualizations of the raw data itself, are available at (ADD LINK OR EXPLAIN GITHUB REPOSITORY).
+
+```{r}
+#| label: tbl-uni
+#| tbl-cap: Descriptives for interactions by University
+
+tab_uni <- readRDS(here::here("02_analysis-codes", "outputs", "table_uni.rds"))
+
+rempsyc::nice_table(tab_uni, separate.header = TRUE, italics = seq(tab_uni))
+```
+
+```{r}
+#| label: tbl-cat
+#| tbl-cap: Descriptives for interactions by Post Category
+
+tab_cat <- readRDS(here::here("02_analysis-codes", "outputs", "table_cat.rds"))
+
+rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
+```
+
+# References

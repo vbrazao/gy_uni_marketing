@@ -69,8 +69,17 @@ tab_n <- dat |>
     University, Category, name = "N.By category"
   ) |> 
   dplyr::mutate(
-    "N.All in University" = sum(`N.By category`),
+    "Total Number of Posts" = sum(`N.By category`),
     .by = University
+  ) |> 
+  tidyr::pivot_wider(
+    names_from = Category,
+    values_from = `N.By category`, 
+    names_prefix = "Number of Posts by Category."
+  ) |> 
+  dplyr::relocate(
+    "Total Number of Posts", 
+    .after = last_col()
   )
 
 # create a plot for each university 

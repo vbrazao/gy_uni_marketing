@@ -1,0 +1,83 @@
+---
+title: "Analysis and Results"
+execute:
+  echo: false
+  message: false
+format: 
+  docx:
+    toc: true
+    number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| message: false
+
+library(groundhog)
+
+groundhog_day <- "2024-03-01"
+
+groundhog::meta.groundhog(groundhog_day)
+
+groundhog::groundhog.library(
+  "
+library(here)
+library(marginaleffects)
+library(lmtest)
+library(sandwich)
+library(gtsummary)
+library(tidyverse)
+  ", date = groundhog_day
+)
+
+dat <- readRDS(
+  file = here::here("01_data-processing", "data", "data_final.rds")
+)
+
+models <- readRDS(
+  file = here::here("02_analysis-codes", "outputs", "models.RDS")
+)
+
+# total number of posts
+n_posts <- nrow(dat)
+```
+
+# Method
+
+Data was collected from 9 leading Israeli universities' public Facebook pages, using CrowdTangle software [@aboutus] to extract and mine data. This enabled us to export all data and information from the universities official Facebook pages, including user responses, engagement rates, and reactions.
+
+Each page's data was converted into a CSV file, with each sheet representing a different page. The timeframe of this sample was initially started on Oct 7th in response to the massacre and terminated within the \_\_ months post the starting of the war. TO ADD: HOW WERE THE FILES ADDED TOGETHER TO CREATE THE FINAL CSV?
+
+## Measures
+
+We were interested in how the number and kind (positive / negative) of interactions to posts were related to the university and the category of post, and therefore created the following measures:
+
+### **Post Category** 
+
+Posts were manually categorized into one of 5 categories: "Community Support", "Updates and Instructions", "Academic Adjustments", "Supporting Our Troops and Hostages", and "Marketing of Academic Programs".
+
+### **Total Interaction**
+
+Total interaction was measured using the sum of interactions, such as likes, shares, reactions, and comments, on a page, which is consistent with previous studies [@eberl2020].
+
+### **Positive Sentiment**
+
+Positive sentiment was calculated for each post by adding the number of positive reactions, namely "Likes", "Love", and "Care" reactions.
+
+### **Negative Sentiment**
+
+Negative sentiment was calculated for each post by adding the number of negative reactions, namely the "Sad" and "Angry" reactions.
+
+# Results
+
+We collected \`r n_dat\` posts from the 9 Universities included in the sample. Table 1 shows the total number of posts in each category created within each University's Facebook page.
+
+NOTE: Consider making the table shorter and wider, giving each category a column so each uni only needs one row.
+
+```{r}
+tab_n <- readRDS(here::here("02_analysis-codes", "outputs", "table_n.rds"))
+
+rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))
+```
+
+Table 1 indicating the following descriptive variables: University, number of followers, total interactions, positive and negative sentiment averages per page.

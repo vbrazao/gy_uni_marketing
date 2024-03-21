@@ -7,6 +7,8 @@ format:
   docx:
     toc: true
     number-sections: true
+  pdf:
+    toc: true
 bibliography: references.bib
 ---
 
@@ -70,11 +72,14 @@ Negative sentiment was calculated for each post by adding the number of negative
 
 # Results
 
-We collected \`r n_dat\` posts from the 9 Universities included in the sample. Table 1 shows the total number of posts in each category created within each University's Facebook page.
+## Descriptives
 
-NOTE: Consider making the table shorter and wider, giving each category a column so each uni only needs one row.
+We collected `r n_posts` posts from the 9 Universities included in the sample. Table 1 shows the total number of posts in each category created within each University's Facebook page, as well as the total number of posts for each University.
 
 ```{r}
+#| label: tbl-n_posts
+#| tbl-cap: Number of posts in sample by University and Category
+
 tab_n <- readRDS(here::here("02_analysis-codes", "outputs", "table_n.rds"))
 
 rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))

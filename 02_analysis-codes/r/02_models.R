@@ -21,6 +21,12 @@ m1.1 <- glm(
   family = quasipoisson
 )
 
+m1.1offset <- glm(
+  formula = interactions ~ university + offset(log(days_up)),
+  data = dat,
+  family = quasipoisson
+)
+
 # interactions by category
 m1.2 <- glm(
   formula = interactions ~ category,
@@ -68,6 +74,7 @@ m3.3 <- glm(
 
 models <- list(
   total_uni = m1.1, 
+  total_uni_offset = m1.1offset,
   total_cat = m1.2, 
   total_uni_cat = m1.3, 
   pos_cat = m2.2, 

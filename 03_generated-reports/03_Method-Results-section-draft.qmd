@@ -6,7 +6,6 @@ execute:
 format: 
   docx:
     toc: true
-    number-sections: true
 bibliography: references.bib
 csl: apa.csl
 ---

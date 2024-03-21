@@ -54,21 +54,29 @@ Each page's data was converted into a CSV file, with each sheet representing a d
 
 We were interested in how the number and kind (positive / negative) of interactions to posts were related to the university and the category of post, and therefore created the following measures:
 
-### **Post Category** 
+### Post Category
 
 Posts were manually categorized into one of 5 categories: "Community Support", "Updates and Instructions", "Academic Adjustments", "Supporting Our Troops and Hostages", and "Marketing of Academic Programs".
 
-### **Total Interaction**
+### Total Interaction
 
 Total interaction was measured using the sum of interactions, such as likes, shares, reactions, and comments, on a page, which is consistent with previous studies [@eberl2020].
 
-### **Positive Sentiment**
+### Positive Sentiment
 
 Positive sentiment was calculated for each post by adding the number of positive reactions, namely "Likes", "Love", and "Care" reactions.
 
-### **Negative Sentiment**
+### Negative Sentiment
 
 Negative sentiment was calculated for each post by adding the number of negative reactions, namely the "Sad" and "Angry" reactions.
+
+## Analysis
+
+All statistical analyses were conducted with R [@rcoreteam2024] version 4.3.3 and RStudio [@rstudio2024] version 2023.12.1.402. All data and code are available at XXX.
+
+Our inferential analysis relies on a series of generalized linear models. To account for potential overdispersion in each of our count outcomes (total interactions, positive sentiment, negative sentiment), we used quasi-poisson models with robust standard errors. For ease of interpretation, we then used the models to create predictions on the response scale (e.g., the number of interactions) for our different groups of interest and plotted means and uncertainty of those predictions.
+
+TO DO: Cite all the packages used in the analysis.
 
 # Results
 
@@ -85,7 +93,7 @@ tab_n <- readRDS(here::here("02_analysis-codes", "outputs", "table_n.rds"))
 rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))
 ```
 
-Examining the descriptive statistics by University, as presented in @tbl-uni, we see clear signs of overdispersion (the standard deviation of each count is clearly higher than the mean). The same can be observed when we calculate descriptive statistics for each category instea, as in @tbl-cat. More descriptive analyses, including simple visualizations of the raw data itself, are available at (ADD LINK OR EXPLAIN GITHUB REPOSITORY).
+Examining the descriptive statistics by University, as presented in @tbl-uni, we see clear signs of overdispersion (the standard deviation of each count is clearly higher than the mean).
 
 ```{r}
 #| label: tbl-uni
@@ -96,6 +104,8 @@ tab_uni <- readRDS(here::here("02_analysis-codes", "outputs", "table_uni.rds"))
 rempsyc::nice_table(tab_uni, separate.header = TRUE, italics = seq(tab_uni))
 ```
 
+The same can be observed when we calculate descriptive statistics for each category instead, as in @tbl-cat. More descriptive analyses, including simple visualizations of the raw data itself, are available at (ADD LINK OR EXPLAIN GITHUB REPOSITORY).
+
 ```{r}
 #| label: tbl-cat
 #| tbl-cap: Descriptives for interactions by Post Category
@@ -104,5 +114,7 @@ tab_cat <- readRDS(here::here("02_analysis-codes", "outputs", "table_cat.rds"))
 
 rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
 ```
+
+## Inferential analysis
 
 # References

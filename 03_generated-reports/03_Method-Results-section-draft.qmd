@@ -4,6 +4,8 @@ execute:
   echo: false
   message: false
 format: 
+  gfm:
+    toc: true
   docx:
     toc: true
 bibliography: references.bib

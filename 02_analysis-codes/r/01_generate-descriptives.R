@@ -66,7 +66,7 @@ tab_cat_list <- levels(dat$Category) |>
 
 tab_n <- dat |> 
   dplyr::count(
-    University, Category, name = "N.By category"
+    University, Category, name = "N.By category", .drop = FALSE
   ) |> 
   dplyr::mutate(
     "Total Number of Posts" = sum(`N.By category`),

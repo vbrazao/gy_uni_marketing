@@ -34,7 +34,18 @@ dat <- dat_raw |>
     
     # create positive sentiment and negative sentiment variables
     pos_sentiment = care + love + likes,
-    neg_sentiment = angry + sad
+    neg_sentiment = angry + sad,
+    
+    # make date created into a date object
+    date_created = lubridate::ymd_hms(date_created) |> 
+      lubridate::as_date(),
+    
+    # create variable of how many days a post has been up by a certain date
+    # we'll take the date 2024-02-08 because it is one day after the last post
+    days_up = lubridate::time_length(
+      lubridate::ymd("2024-02-08") - date_created,
+      unit = "days"
+    )
   )
 
 # save wrangled data

@@ -25,6 +25,7 @@ library(marginaleffects)
 library(lmtest)
 library(sandwich)
 library(gtsummary)
+library(tidyverse)
   ", date = groundhog_day
 )
 
@@ -75,6 +76,22 @@ marginaleffects::plot_predictions(
 ) +
   ggplot2::coord_flip()
 ```
+### With an offset
+
+When we run the same model but adding an offset for the number of days a post has been up, recognizing that posts that have been up longer have had more of an opportunity to accrue likes, results are similar but the differences become less stark.
+
+```{r}
+#| message: false
+gtsummary::tbl_regression(models$total_uni_offset, vcov = sandwich::vcovHC, intercept = TRUE, tidy_fun = broom.helpers::tidy_parameters, exponentiate = TRUE)
+
+marginaleffects::plot_predictions(
+  model = models$total_uni_offset,
+  by = "university",
+  vcov = "HC3"
+) +
+  ggplot2::coord_flip()
+```
+
 
 ## By category
 

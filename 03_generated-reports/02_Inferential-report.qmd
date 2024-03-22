@@ -6,7 +6,8 @@ execute:
 format: 
   docx:
     toc: true
-    number-sections: true
+  html:
+    toc: true
 ---
 
 ```{r}
@@ -65,7 +66,6 @@ To view the differences more clearly, we make and summarize predictions for post
 marginaleffects::avg_predictions(
   model = models$total_uni,
   by = "university",
-  hypothesis = "pairwise",
   vcov = "HC3"
 ) 
 ```
@@ -90,7 +90,7 @@ marginaleffects::avg_predictions(
   model = models$total_uni,
   by = "university",
   hypothesis = "pairwise",
-  type = response,
+  type = "response",
   vcov = "HC3"
 ) |> print(nrows = 50)
 ```

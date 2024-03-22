@@ -26,8 +26,11 @@ library(lmtest)
 library(sandwich)
 library(gtsummary)
 library(tidyverse)
+library(scales)
   ", date = groundhog_day
 )
+
+ggplot2::theme_set(theme_bw())
 
 dat <- readRDS(
   file = here::here("01_data-processing", "data", "data_final.rds")
@@ -36,6 +39,8 @@ dat <- readRDS(
 models <- readRDS(
   file = here::here("02_analysis-codes", "outputs", "models.RDS")
 )
+
+
 ```
 
 # Total interactions
@@ -60,8 +65,9 @@ To view the differences more clearly, we make and summarize predictions for post
 marginaleffects::avg_predictions(
   model = models$total_uni,
   by = "university",
+  hypothesis = "pairwise",
   vcov = "HC3"
-)
+) 
 ```
 
 
@@ -76,6 +82,53 @@ marginaleffects::plot_predictions(
 ) +
   ggplot2::coord_flip()
 ```
+
+And for inference, we calculate pairwise comparisons of the predicted total interactions for all categories:
+
+```{r}
+marginaleffects::avg_predictions(
+  model = models$total_uni,
+  by = "university",
+  hypothesis = "pairwise",
+  type = response,
+  vcov = "HC3"
+) |> print(nrows = 50)
+```
+
+And we plot so we can see better. From the plot, it is easy to see that the only differences that arenot significant are between the categories "Updates and Instructions", "Marketing of Academic Programs", and "Academic Adjustments". We can also conclude that post in the category "Supporting our Troops and Hostages" received more interactions than posts in any other category.
+
+
+```{r}
+uni_comparisons <- marginaleffects::avg_predictions(
+  model = models$total_uni,
+  by = "university",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) 
+
+uni_comparisons |> 
+  dplyr::slice(1:15) |> 
+  ggplot(aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  scale_x_discrete(labels = scales::label_wrap(60)) +
+  coord_flip(ylim = c(-700, 600))
+
+uni_comparisons |> 
+  dplyr::slice(16:30) |> 
+  ggplot(aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  scale_x_discrete(labels = scales::label_wrap(60)) +
+  coord_flip(ylim = c(-700, 600))
+
+uni_comparisons |> 
+  dplyr::slice(31:45) |> 
+  ggplot(aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  scale_x_discrete(labels = scales::label_wrap(60)) +
+  coord_flip(ylim = c(-700, 600))
+```
+
 ### With an offset
 
 When we run the same model but adding an offset for the number of days a post has been up, recognizing that posts that have been up longer have had more of an opportunity to accrue likes, results are similar but the differences become less stark.
@@ -127,6 +180,35 @@ marginaleffects::plot_predictions(
 ) +
   ggplot2::coord_flip()
 ```
+
+And for inference, we calculate pairwise comparisons of the predicted total interactions for all categories:
+
+```{r}
+marginaleffects::avg_predictions(
+  model = models$total_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  vcov = "HC3"
+)
+```
+
+And we plot so we can see better. From the plot, it is easy to see that the only differences that arenot significant are between the categories "Updates and Instructions", "Marketing of Academic Programs", and "Academic Adjustments". We can also conclude that post in the category "Supporting our Troops and Hostages" received more interactions than posts in any other category.
+
+
+```{r}
+marginaleffects::avg_predictions(
+  model = models$total_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  ggplot(aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  scale_x_discrete(labels = scales::label_wrap(30)) +
+  coord_flip()
+```
+
 
 ### Controlling for University
 
@@ -204,6 +286,30 @@ marginaleffects::plot_predictions(
   ggplot2::coord_flip()
 ```
 
+For inference, as above, we calculate and then plot pairwise comparisons. We can see that "Supporting Our Troops and Hostages"-type posts receive significantly more positive interactions than any other kind of post except for those in the category "Community Support", where the difference is not significant. Similarly, "Community Support"-type posts receive more positive interactions than all other posts, except for "Supporting Our Troops and Hostages"-type posts.
+
+```{r}
+marginaleffects::avg_predictions(
+  model = models$pos_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+)
+
+marginaleffects::avg_predictions(
+  model = models$pos_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  ggplot(aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  scale_x_discrete(labels = scales::label_wrap(30)) +
+  coord_flip()
+```
+
 ### Controlling for university
 
 
@@ -267,6 +373,30 @@ marginaleffects::plot_predictions(
   vcov = "HC3"
 ) +
   ggplot2::coord_flip()
+```
+
+For inference, as above, we calculate and then plot pairwise comparisons. It is clear that posts in the category "Supporing our Troops and Hostages" receive more negative interactions than any other category, and that pairwise difference between all the other categories are comparatively negligible.
+
+```{r}
+marginaleffects::avg_predictions(
+  model = models$neg_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+)
+
+marginaleffects::avg_predictions(
+  model = models$neg_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  ggplot(aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  scale_x_discrete(labels = scales::label_wrap(30)) +
+  coord_flip()
 ```
 
 ### Controlling for university

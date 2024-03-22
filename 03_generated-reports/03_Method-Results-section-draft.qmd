@@ -3,10 +3,10 @@ title: "Analysis and Results"
 execute:
   echo: false
   message: false
-format: 
-  gfm:
-    toc: true
+format:
   docx:
+    toc: true
+  html:
     toc: true
 bibliography: references.bib
 csl: apa.csl
@@ -116,5 +116,154 @@ rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
 ```
 
 ## Inferential analysis
+
+In this section, we highlight the model results most relevant to our research questions. A full inferential report with further results is available at XXX. We will look at the following questions in order:
+
+-   How do total interactions to posts vary by university?
+
+-   How do total interaction to posts vary by post category?
+
+-   How do positive interactions to posts vary by post category?
+
+-   How do negative interaction to posts vary by post category?
+
+### Total Interaction
+
+#### How do total interactions vary by university?
+
+Using our quasi-poisson model predicting total interactions as a function of university, we generate predictions for total interactions across the dataset and marginalize over the different universities. The results, presented in @tbl-total-uni, show that the University of Haifa has the most interactions and Bar-Ilan University the least.
+
+```{r}
+#| label: tbl-total-uni
+#| tbl-cap: Average predictions for total interactions by university
+
+marginaleffects::avg_predictions(
+  model = models$total_uni,
+  by = "university",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(rowid, s.value, p.value, rowid_dedup)) |> 
+  rempsyc::nice_table()
+```
+
+We compute pairwise differences to evaluate which universities receive significantly more (or fewer) interactions that the others. For brevity, @tbl-total-uni-pairs below displays all the significant estimates for pairwise differences. For the unabridged table and accompanying plots, see XXX.
+
+```{r}
+#| label: tbl-total-uni-pairs
+#| tbl-cap: Significant pairwise differences for total interactions by university
+
+marginaleffects::avg_predictions(
+  model = models$total_uni,
+  by = "university",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(s.value)) |> 
+  dplyr::filter(p.value < .05) |> 
+  rempsyc::nice_table()
+```
+
+#### How do total interactions vary by post category?
+
+Using our quasi-poisson model predicting total interactions as a function of post category, we generate predictions for total interactions across the dataset and marginalize over the different categories. The results, presented in @tbl-total-cat, show that "Supporting Our Troops and Hostages" has the most interactions and "Updates and Instructions" the least.
+
+```{r}
+#| label: tbl-total-cat
+#| tbl-cap: Average predictions for total interactions by category
+
+marginaleffects::avg_predictions(
+  model = models$total_cat,
+  by = "category",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(rowid, s.value, p.value, rowid_dedup)) |> 
+  rempsyc::nice_table()
+```
+
+We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-total-cat-pairs below. All differences are significant except for those between the categories "Updates and Instructions", "Marketing of Academic Programs", and "Academic Adjustments". Posts in the category "Supporting our Troops and Hostages" received significantly more interactions than posts in any other category. 
+
+```{r}
+#| label: tbl-total-cat-pairs
+#| tbl-cap: Pairwise differences for total interactions by category
+
+marginaleffects::avg_predictions(
+  model = models$total_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(s.value)) |> 
+  rempsyc::nice_table()
+```
+
+### How do positive interactions vary by post category?
+
+Using our quasi-poisson model predicting positive sentiment as a function of post category, we generate predictions for positive sentiment across the dataset and marginalize over the different categories. The results, presented in @tbl-pos-cat, show that "Supporting Our Troops and Hostages" has the most interactions and "Updates and Instructions" the least.
+
+```{r}
+#| label: tbl-pos-cat
+#| tbl-cap: Average predictions for positive sentiment by category
+
+marginaleffects::avg_predictions(
+  model = models$pos_cat,
+  by = "category",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(rowid, s.value, p.value, rowid_dedup)) |> 
+  rempsyc::nice_table()
+```
+
+We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-pos-cat-pairs below. The category "Supporting our Troops and Hostages" receives more positive interactions that the rest, but not significantly more than "Community Support".
+
+```{r}
+#| label: tbl-pos-cat-pairs
+#| tbl-cap: Pairwise differences for positive sentiment by category
+
+marginaleffects::avg_predictions(
+  model = models$pos_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(s.value)) |> 
+  rempsyc::nice_table()
+```
+
+### How do negative interactions vary by post category?
+
+Using our quasi-poisson model predicting negative sentiment as a function of post category, we generate predictions for negative sentiment across the dataset and marginalize over the different categories. The results, presented in @tbl-neg-cat, show that "Supporting Our Troops and Hostages" has the most interactions and "Updates and Instructions" the least. We can also see that categories other than "Supporting Our Troops and Hostages" receive a comparatively negligible amount of negative interactions.
+
+```{r}
+#| label: tbl-neg-cat
+#| tbl-cap: Average predictions for negative sentiment by category
+
+marginaleffects::avg_predictions(
+  model = models$neg_cat,
+  by = "category",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(rowid, s.value, p.value, rowid_dedup)) |> 
+  rempsyc::nice_table()
+```
+
+We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-neg-cat-pairs below. The category "Supporting our Troops and Hostages" receives more negative interactions that all other categories, and "Community Support" posts receive significantly more negative interactions than "Academic Adjustments" posts, but this difference is small at 7.36 more negative interactions (95% CI[0.05, 14.67]).
+
+```{r}
+#| label: tbl-neg-cat-pairs
+#| tbl-cap: Pairwise differences for negative sentiment by category
+
+marginaleffects::avg_predictions(
+  model = models$neg_cat,
+  by = "category",
+  hypothesis = "pairwise",
+  type = "response",
+  vcov = "HC3"
+) |> 
+  dplyr::select(-c(s.value)) |> 
+  rempsyc::nice_table()
+```
 
 # References

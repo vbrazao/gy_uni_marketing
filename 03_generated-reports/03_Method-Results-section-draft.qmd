@@ -5,7 +5,7 @@ execute:
   message: false
 format:
   docx:
-    toc: true
+    toc: false
   html:
     toc: true
 bibliography: references.bib
@@ -74,7 +74,7 @@ Negative sentiment was calculated for each post by adding the number of negative
 
 All statistical analyses were conducted with R [@rcoreteam2024] version 4.3.3 and RStudio [@rstudio2024] version 2023.12.1.402. All data and code are available at XXX.
 
-Our inferential analysis relies on a series of generalized linear models. To account for potential overdispersion in each of our count outcomes (total interactions, positive sentiment, negative sentiment), we used quasi-poisson models with robust standard errors. For ease of interpretation, we then used the models to create predictions on the response scale (e.g., the number of interactions) for our different groups of interest and plotted means and uncertainty of those predictions.
+Our inferential analysis relies on a series of generalized linear models. To account for potential overdispersion in each of our count outcomes (total interactions, positive sentiment, negative sentiment), we used quasi-poisson models with robust standard errors [@wooldridge2002]. For ease of interpretation, we then used the models to create predictions on the response scale (e.g., the number of interactions) for our different groups of interest and plotted means and uncertainty of those predictions.
 
 TO DO: Cite all the packages used in the analysis.
 
@@ -181,7 +181,7 @@ marginaleffects::avg_predictions(
   rempsyc::nice_table()
 ```
 
-We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-total-cat-pairs below. All differences are significant except for those between the categories "Updates and Instructions", "Marketing of Academic Programs", and "Academic Adjustments". Posts in the category "Supporting our Troops and Hostages" received significantly more interactions than posts in any other category. 
+We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-total-cat-pairs below. All differences are significant except for those between the categories "Updates and Instructions", "Marketing of Academic Programs", and "Academic Adjustments". Posts in the category "Supporting our Troops and Hostages" received significantly more interactions than posts in any other category.
 
 ```{r}
 #| label: tbl-total-cat-pairs
@@ -249,7 +249,7 @@ marginaleffects::avg_predictions(
   rempsyc::nice_table()
 ```
 
-We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-neg-cat-pairs below. The category "Supporting our Troops and Hostages" receives more negative interactions that all other categories, and "Community Support" posts receive significantly more negative interactions than "Academic Adjustments" posts, but this difference is small at 7.36 more negative interactions (95% CI[0.05, 14.67]).
+We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-neg-cat-pairs below. The category "Supporting our Troops and Hostages" receives more negative interactions that all other categories, and "Community Support" posts receive significantly more negative interactions than "Academic Adjustments" posts, but this difference is small at 7.36 more negative interactions (95% CI\[0.05, 14.67\]).
 
 ```{r}
 #| label: tbl-neg-cat-pairs

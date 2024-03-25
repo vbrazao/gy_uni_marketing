@@ -46,7 +46,7 @@ n_posts <- nrow(dat)
 
 # Method
 
-Data was collected from 9 leading Israeli universities' public Facebook pages, using CrowdTangle software [@aboutus] to extract and mine data. This enabled us to export all data and information from the universities official Facebook pages, including user responses, engagement rates, and reactions.
+Data was collected from 10 leading Israeli universities' public Facebook pages, using CrowdTangle software [@aboutus] to extract and mine data. This enabled us to export all data and information from the universities official Facebook pages, including user responses, engagement rates, and reactions.
 
 Each page's data was converted into a CSV file, with each sheet representing a different page. The timeframe of this sample was initially started on Oct 7th in response to the massacre and terminated within the \_\_ months post the starting of the war. TO ADD: HOW WERE THE FILES ADDED TOGETHER TO CREATE THE FINAL CSV?
 

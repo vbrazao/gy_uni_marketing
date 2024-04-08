@@ -4,9 +4,10 @@ execute:
   echo: false
   message: false
 format:
+  html: 
+    toc: true
   docx:
     toc: true
-    number-sections: true
 ---
 
 ```{r}

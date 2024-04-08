@@ -79,17 +79,15 @@ Negative sentiment was calculated for each post by adding the number of negative
 
 ## Analysis
 
-All statistical analyses were conducted with R [@rcoreteam2024] version 4.3.3 and RStudio [@rstudio2024] version 2023.12.1.402. All data and code are available at XXX.
+All statistical analyses were conducted with R [@rcoreteam2024] version 4.3.3 and RStudio [@rstudio2024] version 2023.12.1.402. All data and code are available on this project's GitHub repository (<https://github.com/vbrazao/gy_uni_marketing>).
 
 Our inferential analysis relies on a series of generalized linear models. To account for potential overdispersion in each of our count outcomes (total interactions, positive sentiment, negative sentiment), we used quasi-poisson models with robust standard errors [@wooldridge2002]. For ease of interpretation, we then used the models to create predictions on the response scale (e.g., the number of interactions) for our different groups of interest and plotted means and uncertainty of those predictions.
-
-TO DO: Cite all the packages used in the analysis.
 
 # Results
 
 ## Descriptive analysis
 
-We collected `r n_posts` posts from the 9 Universities included in the sample. @tbl-n_posts shows the total number of posts in each category created within each University's Facebook page, as well as the total number of posts for each University. We can see that all universities had over 70 posts in this period, with Bar-Ilan University topping the chart with 128 posts.
+We collected `r n_posts` posts from the 10 Universities included in the sample. @tbl-n_posts shows the total number of posts in each category created within each University's Facebook page, as well as the total number of posts for each University. We can see that all universities had over 70 posts in this period, with Bar-Ilan University topping the chart with 128 posts.
 
 ```{r}
 #| label: tbl-n_posts
@@ -111,7 +109,7 @@ tab_uni <- readRDS(here::here("02_analysis-codes", "outputs", "table_uni.rds"))
 rempsyc::nice_table(tab_uni, separate.header = TRUE, italics = seq(tab_uni))
 ```
 
-The same can be observed when we calculate descriptive statistics for each category instead, as in @tbl-cat. More descriptive analyses, including simple visualizations of the raw data itself, are available at (ADD LINK OR EXPLAIN GITHUB REPOSITORY).
+The same can be observed when we calculate descriptive statistics for each category instead, as in @tbl-cat. More descriptive analyses, including simple visualizations of the raw data itself, are available on the GitHub repository (<https://github.com/vbrazao/gy_uni_marketing>), within the folder "03_generated-reports".
 
 ```{r}
 #| label: tbl-cat
@@ -124,7 +122,7 @@ rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
 
 ## How are posts distributed over time?
 
-As illustrated in @fig-timeline, there seems to be a trade-off over time between posts related to the marketing of academic programs (which increase in frequency over time) and posts related to community support (which decrease over time). In contrast, there is a high frequency of posts supporting the troops and hostages which does not seem to greatly change over time, and a low frequency of posts related to academic adjustments and updates and instructions throughout the 4 months of data. Alternative visualizations of the data as well as a table summarizing the frequency of posts per 7 day period are available in XXX.
+As illustrated in @fig-timeline, there seems to be a trade-off over time between posts related to the marketing of academic programs (which increase in frequency over time) and posts related to community support (which decrease over time). In contrast, there is a high frequency of posts supporting the troops and hostages which does not seem to greatly change over time, and a low frequency of posts related to academic adjustments and updates and instructions throughout the 4 months of data. Alternative visualizations of the data as well as a table summarizing the frequency of posts per 7 day period are presented in the supplementary Descriptives report, available on the GitHub repository (<https://github.com/vbrazao/gy_uni_marketing>), within the folder "03_generated-reports".
 
 ```{r}
 #| label: fig-timeline
@@ -151,7 +149,9 @@ dat |>
 
 ## Inferential analysis
 
-In this section, we highlight the model results most relevant to our research questions. A full inferential report with further results is available at XXX. We will look at the following questions in order:
+In this section, we highlight the model results most relevant to our research questions. A full inferential report with further results is available on the GitHub repository (<https://github.com/vbrazao/gy_uni_marketing>), within the folder "03_generated-reports".
+
+We will look at the following questions in order:
 
 -   How do total interactions to posts vary by university?
 
@@ -190,7 +190,7 @@ marginaleffects::avg_predictions(
   coord_flip()
 ```
 
-We compute pairwise differences to evaluate which universities receive significantly more (or fewer) interactions than the others. For brevity, @tbl-total-uni-pairs below displays all the significant estimates for pairwise differences. For the unabridged table and accompanying plots, see XXX.
+We compute pairwise differences to evaluate which universities receive significantly more (or fewer) interactions than the others. For brevity, @tbl-total-uni-pairs below displays all the significant estimates for pairwise differences. For the unabridged table and accompanying plots, see the online Inferential Report, available on the GitHub repository (<https://github.com/vbrazao/gy_uni_marketing>), within the folder "03_generated-reports".
 
 ```{r}
 #| label: tbl-total-uni-pairs

@@ -34,6 +34,10 @@ tab_n <- readRDS(
   here::here("02_analysis-codes", "outputs", "table_n.rds")
 )
 
+tab_weeks <- readRDS(
+  here::here("02_analysis-codes", "outputs", "table_weeks.rds")
+)
+
 tab_uni <- readRDS(
   here::here("02_analysis-codes", "outputs", "table_uni.rds")
 )
@@ -50,12 +54,24 @@ tab_list <- readRDS(
 plot_list <- readRDS(
   here::here("02_analysis-codes", "outputs", "plots_total.rds")
 )
+
+plot_timeline <- readRDS(
+  here::here("02_analysis-codes", "outputs", "plot_timeline.rds")
+)
 ```
 
 # Tables
 ## Number of posts by university and category
 ```{r}
 rempsyc::nice_table(tab_n, separate.header = TRUE, italics = seq(tab_n))
+```
+
+## Number of posts by category and week
+
+(To create this table, all dates except for Fridays were transformed into the date of the next Friday. Therefore, the displayed counts correspond to the number of posts published from the previous Saturday (inclusive) until the Friday that corresponds to the date in the "7 days ending on" column. This was chosen so that the first "week" corresponds to the 7 days immediately after Oct 7, inclusive. As the last day of data is Feb 7, 2024, there is not data for Feb 8 and 9, so the last "week" contains only 5 days of data.) 
+
+```{r}
+rempsyc::nice_table(tab_weeks, separate.header = TRUE, italics = seq(tab_weeks))
 ```
 
 
@@ -119,3 +135,10 @@ for (i in 1:length(plot_list)){
     cat(res, sep = '\n')
 }
 ```
+
+## Alternative timeline plot
+
+```{r}
+plot_timeline
+```
+

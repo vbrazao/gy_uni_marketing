@@ -4,7 +4,7 @@ execute:
   echo: false
   message: false
 format:
-  docx:
+  docx: 
     toc: false
   html:
     toc: true
@@ -124,35 +124,12 @@ rempsyc::nice_table(tab_cat, separate.header = TRUE, italics = seq(tab_cat))
 
 ## How are posts distributed over time?
 
-text
+As illustrated in @fig-timeline, there seems to be a trade-off over time between posts related to the marketing of academic programs (which increase in frequency over time) and posts related to community support (which decrease over time). In contrast, there is a high frequency of posts supporting the troops and hostages which does not seem to greatly change over time, and a low frequency of posts related to academic adjustments and updates and instructions throughout the 4 months of data. Alternative visualizations of the data as well as a table summarizing the frequency of posts per 7 day period are available in XXX.
 
 ```{r}
 #| label: fig-timeline
-#| fig-cap: Timeline of posts by university 
-#| fig-width: 7.5
-#| fig-height: 7
+#| fig-cap: Timeline of all posts
 
-dat |> 
-  mutate(
-    date_created = lubridate::as_datetime(date_created)
-  ) |> 
-  ggplot(aes(x = date_created, y = category, color = category)) +
-  geom_jitter(height = 0, width = 0, alpha = .6) +
-  scale_color_viridis_d(option = "A", end = 0.8) +
-  coord_cartesian(xlim = c(timeline_start,
-                           timeline_end)) +
-  geom_vline(xintercept = lubridate::dmy("07-10-2023") |> as_datetime(), linewidth = .5, linetype = "dotted") +
-  facet_grid(university ~ ., labeller = label_wrap_gen(10)
-            ) +
-  labs(x = "", y = "") +
-  theme(
-    legend.position = "none",
-    strip.text.y = element_text(angle = 0), 
-    panel.grid.minor.x = element_blank()
-  )
-```
-
-```{r}
 dat |> 
   mutate(
     date_created = lubridate::as_datetime(date_created)
@@ -163,77 +140,13 @@ dat |>
   coord_cartesian(xlim = c(timeline_start,
                            timeline_end)) +
   geom_vline(xintercept = lubridate::dmy("07-10-2023") |> as_datetime(), linewidth = .5, linetype = "dotted") +
-  labs(x = "", y = "") +
+  labs(x = "", y = "", 
+       caption = stringr::str_wrap("Note. Dotted line highlights Oct. 7, 2023. Each point represents one post. Points are arranged as a \"beeswarm\" to make it easier to see how many posts of the same category were published on the same day.", width = 80)) +
   theme(
     legend.position = "none",
     strip.text.y = element_text(angle = 0), 
     panel.grid.minor.x = element_blank()
   )
-
-
-```
-
-```{r}
-dat |> 
-  mutate(
-    date_created = lubridate::as_datetime(date_created)
-  ) |> 
-  ggplot(aes(x = date_created, y = category, color = category)) +
-  geom_jitter(height = .2, width = 0, alpha = .6) +
-  scale_color_viridis_d(option = "A", begin = 0.2, end = 0.8) +
-  coord_cartesian(xlim = c(timeline_start,
-                           timeline_end)) +
-  geom_vline(xintercept = lubridate::dmy("07-10-2023") |> as_datetime(), linewidth = .5, linetype = "dotted") +
-  labs(x = "", y = "") +
-  theme(
-    legend.position = "none",
-    strip.text.y = element_text(angle = 0), 
-    panel.grid.minor.x = element_blank()
-  )
-
-dat |> 
-  mutate(
-    date_created = lubridate::as_datetime(date_created),
-    week = lubridate::isoweek(date_created)
-  ) |> 
-  ggplot(aes(x = factor(week), y = category, color = category)) +
-  geom_count() +
-  scale_color_viridis_d(option = "A", begin = 0.2, end = 0.8) +
-  coord_cartesian(xlim = c(timeline_start,
-                           timeline_end)) +
-  # geom_vline(xintercept = lubridate::dmy("07-10-2023") |> as_datetime(), linewidth = .5, linetype = "dotted") +
-  labs(x = "", y = "") +
-  theme(
-    legend.position = "none",
-    strip.text.y = element_text(angle = 0), 
-    panel.grid.minor.x = element_blank()
-  )
-
-dat |> 
-  mutate(
-    date_summary = lubridate::as_datetime(date_created) |> lubridate::ceiling_date(unit = "week", week_start = 5),
-  ) |> 
-  ggplot(aes(x = date_created, y = category, color = category)) +
-  geom_count(aes(x = date_summary)) + theme(legend.position = "none") +
-  scale_color_viridis_d(option = "A", begin = 0.2, end = 0.8) +
-  coord_cartesian(xlim = c(timeline_start, timeline_end)) +
-  labs(x = "", y = "")
-
-tab_weeks <- dat |> 
-  mutate(
-    date_summary = lubridate::as_datetime(date_created) |> lubridate::ceiling_date(unit = "week", week_start = 5)
-    )|> 
-      count("Week ending on" = date_summary, category, .drop = FALSE) |> 
-  tidyr::pivot_wider(
-    names_from = category,
-    values_from = n, 
-    names_prefix = "Number of Posts per Category."
-  ) |> 
-  mutate(
-    "Week ending on" = lubridate::as_date(`Week ending on`)
-  )
-
-rempsyc::nice_table(tab_weeks, separate.header = TRUE, italics = seq(tab_weeks))
 ```
 
 ## Inferential analysis

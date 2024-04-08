@@ -29,6 +29,7 @@ tab_uni <- dat |>
       .names = "{.col}.{.fn}"
     ),
     N = dplyr::n(),
+    "Max Number of Followers" = max(`Page Followers`),
     .by = University
   )
 
@@ -60,6 +61,20 @@ tab_cat_list <- levels(dat$Category) |>
         N = dplyr::n(),
         .by = University
       ), 
+  )
+
+tab_weeks <- dat |> 
+  mutate(
+    date_summary = lubridate::as_datetime(`Date Created`) |> lubridate::ceiling_date(unit = "week", week_start = 5)
+  )|> 
+  count("7 days ending on" = date_summary, Category, .drop = FALSE) |> 
+  tidyr::pivot_wider(
+    names_from = Category,
+    values_from = n, 
+    names_prefix = "Number of Posts per Category."
+  ) |> 
+  mutate(
+    "7 days ending on" = lubridate::as_date(`7 days ending on`)
   )
 
 # table with just the number of posts
@@ -95,6 +110,28 @@ plot_total_list <- unique(dat$University) |>
       coord_flip()
   )
 
+# create timeline plot
+
+timeline_start <- lubridate::dmy("07-10-2023") |> lubridate::as_datetime()
+timeline_end <- lubridate::dmy("08-02-2024") |> lubridate::as_datetime()
+
+plot_timeline <- dat |> 
+  mutate(
+    date_created = lubridate::as_datetime(`Date Created`)
+  ) |> 
+  ggplot(aes(x = date_created, y = Category, color = Category)) +
+  geom_jitter(height = .2, width = 0, alpha = .6) +
+  scale_color_viridis_d(option = "A", begin = 0.2, end = 0.8) +
+  coord_cartesian(xlim = c(timeline_start,
+                           timeline_end)) +
+  geom_vline(xintercept = lubridate::dmy("07-10-2023") |> as_datetime(), linewidth = .5, linetype = "dotted") +
+  labs(x = "", y = "") +
+  theme(
+    legend.position = "none",
+    strip.text.y = element_text(angle = 0), 
+    panel.grid.minor.x = element_blank()
+  )
+
 # save tables
 saveRDS(
   object = tab_uni,
@@ -104,6 +141,11 @@ saveRDS(
 saveRDS(
   object = tab_cat,
   file = here::here("02_analysis-codes", "outputs", "table_cat.rds")
+)
+
+saveRDS(
+  object = tab_weeks,
+  file = here::here("02_analysis-codes", "outputs", "table_weeks.rds")
 )
 
 saveRDS(
@@ -121,6 +163,12 @@ saveRDS(
 saveRDS(
   object = plot_total_list,
   file = here::here("02_analysis-codes", "outputs", "plots_total.rds")
+)
+
+# save timeline plot
+saveRDS(
+  object = plot_timeline,
+  file = here::here("02_analysis-codes", "outputs", "plot_timeline.rds")
 )
 
 # clean environment

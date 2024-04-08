@@ -40,8 +40,6 @@ dat <- readRDS(
 models <- readRDS(
   file = here::here("02_analysis-codes", "outputs", "models.RDS")
 )
-
-
 ```
 
 # Total interactions

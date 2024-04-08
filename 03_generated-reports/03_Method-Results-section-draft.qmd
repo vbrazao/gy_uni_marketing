@@ -133,19 +133,23 @@ dat |>
     date_created = lubridate::as_datetime(date_created)
   ) |> 
   ggplot(aes(x = date_created, y = category, color = category)) +
-  ggbeeswarm::geom_beeswarm(alpha = 0.8, cex = 1.1, priority = "descending") +
+  ggbeeswarm::geom_beeswarm(alpha = 0.75, size = 1.15, cex = 1.1, priority = "descending") +
   scale_color_viridis_d(option = "A", begin = 0.2, end = 0.8) +
   coord_cartesian(xlim = c(timeline_start,
                            timeline_end)) +
   geom_vline(xintercept = lubridate::dmy("07-10-2023") |> as_datetime(), linewidth = .5, linetype = "dotted") +
-  labs(x = "", y = "", 
-       caption = stringr::str_wrap("Note. Dotted line highlights Oct. 7, 2023. Each point represents one post. Points are arranged as a \"beeswarm\" to make it easier to see how many posts of the same category were published on the same day.", width = 80)) +
+  scale_y_discrete(
+    labels = label_wrap_gen(width = 15)
+  ) +
+  labs(x = "", y = "") +
   theme(
     legend.position = "none",
     strip.text.y = element_text(angle = 0), 
     panel.grid.minor.x = element_blank()
   )
 ```
+
+Note. Dotted line highlights Oct. 7, 2023. Each point represents one post. Points are arranged as a "beeswarm" to make it easier to see how many posts of the same category were published on the same day.
 
 ## Inferential analysis
 
@@ -186,9 +190,11 @@ marginaleffects::avg_predictions(
   ) |> 
   ggplot(aes(x = university, y = estimate, ymin = conf.low, ymax = conf.high)) +
   geom_pointrange() +
-  labs(x = "", y = "Total Interactions", caption = stringr::str_wrap("Note: Points represent expected values for the mean number of total interactions, lines show corresponding 95% Confidence Intervals", 80)) +
+  labs(x = "", y = "Total Interactions") +
   coord_flip()
 ```
+
+Note: Points represent expected values for the mean number of total interactions, lines show corresponding 95% Confidence Intervals
 
 We compute pairwise differences to evaluate which universities receive significantly more (or fewer) interactions than the others. For brevity, @tbl-total-uni-pairs below displays all the significant estimates for pairwise differences. For the unabridged table and accompanying plots, see the online Inferential Report, available on the GitHub repository (<https://github.com/vbrazao/gy_uni_marketing>), within the folder "03_generated-reports".
 
@@ -231,9 +237,14 @@ marginaleffects::avg_predictions(
   ) |> 
   ggplot(aes(x = category, y = estimate, ymin = conf.low, ymax = conf.high)) +
   geom_pointrange() +
-  labs(x = "", y = "Total Interactions", caption = stringr::str_wrap("Note: Points represent expected values for the mean number of total interactions, lines show corresponding 95% Confidence Intervals", 80)) +
+  scale_x_discrete(
+    labels = label_wrap_gen(width = 15)
+  ) +
+  labs(x = "", y = "Total Interactions") +
   coord_flip()
 ```
+
+Note: Points represent expected values for the mean number of total interactions, lines show corresponding 95% Confidence Intervals
 
 We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions than the others and present results in @tbl-total-cat-pairs below. All differences are significant except for those between the categories "Updates and Instructions", "Marketing of Academic Programs", and "Academic Adjustments". Posts in the category "Supporting our Troops and Hostages" received significantly more interactions than posts in any other category.
 
@@ -275,9 +286,14 @@ marginaleffects::avg_predictions(
   ) |> 
   ggplot(aes(x = category, y = estimate, ymin = conf.low, ymax = conf.high)) +
   geom_pointrange() +
-  labs(x = "", y = "Positive Interactions", caption = stringr::str_wrap("Note: Points represent expected values for the mean number of positive interactions, lines show corresponding 95% Confidence Intervals", 80)) +
+  scale_x_discrete(
+    labels = label_wrap_gen(width = 15)
+  ) +
+  labs(x = "", y = "Positive Interactions") +
   coord_flip()
 ```
+
+Note: Points represent expected values for the mean number of positive interactions, lines show corresponding 95% Confidence Intervals
 
 We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions that the others and present results in @tbl-pos-cat-pairs below. The category "Supporting our Troops and Hostages" receives more positive interactions that the rest, but not significantly more than "Community Support".
 
@@ -319,9 +335,14 @@ marginaleffects::avg_predictions(
   ) |> 
   ggplot(aes(x = category, y = estimate, ymin = conf.low, ymax = conf.high)) +
   geom_pointrange() +
-  labs(x = "", y = "Positive Interactions", caption = stringr::str_wrap("Note: Points represent expected values for the mean number of positive interactions, lines show corresponding 95% Confidence Intervals", 80)) +
+  scale_x_discrete(
+    labels = label_wrap_gen(width = 15)
+  ) +
+  labs(x = "", y = "Positive Interactions") +
   coord_flip()
 ```
+
+Note: Points represent expected values for the mean number of positive interactions, lines show corresponding 95% Confidence Intervals
 
 We compute pairwise differences to evaluate which categories receive significantly more (or fewer) interactions than the others and present results in @tbl-neg-cat-pairs below. The category "Supporting our Troops and Hostages" receives more negative interactions that all other categories, and "Community Support" posts receive significantly more negative interactions than "Academic Adjustments" posts, but this difference is small at 7.36 more negative interactions (95% CI\[0.05, 14.67\]).
 

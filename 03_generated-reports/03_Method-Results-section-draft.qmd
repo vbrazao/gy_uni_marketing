@@ -338,7 +338,7 @@ marginaleffects::avg_predictions(
   scale_x_discrete(
     labels = label_wrap_gen(width = 15)
   ) +
-  labs(x = "", y = "Positive Interactions") +
+  labs(x = "", y = "Negative Interactions") +
   coord_flip()
 ```
 

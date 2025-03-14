@@ -6,7 +6,7 @@
 .quarto
 
 # exclude everything in the folders
-01_data-processing/data/*
+#01_data-processing/data/*
 
 # but keep the .gitkeep files so the "empty" folder is tracked and uploaded
-!01_data-processing/data/.gitkeep
+#!01_data-processing/data/.gitkeep
